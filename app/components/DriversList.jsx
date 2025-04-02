@@ -5,14 +5,16 @@ import {
   Image,
   FlatList,
   ActivityIndicator,
-  StyleSheet,
+  TouchableOpacity,
 } from "react-native";
 import { getDrivers } from "../api"; // Adjust the import path as needed
+import { useRouter } from "expo-router";
 
 const DriversList = () => {
   const [drivers, setDrivers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchDrivers = async () => {
@@ -28,54 +30,43 @@ const DriversList = () => {
     fetchDrivers();
   }, []);
 
+  const handleDriverPress = (driver) => {
+    // Use a simpler route format that's more likely to work with Expo Router
+    router.push(
+      `/driver/${driver.driver_number}?name=${encodeURIComponent(
+        driver.full_name
+      )}`
+    );
+  };
+
   if (loading) return <ActivityIndicator size="large" color="#0000ff" />;
-  if (error) return <Text>Error: {error}</Text>;
+  if (error) return <Text className="text-red-500">Error: {error}</Text>;
 
   return (
     <FlatList
       data={drivers}
       keyExtractor={(item) => item.driver_number.toString()}
       renderItem={({ item }) => (
-        <View style={styles.card}>
-          <Image source={{ uri: item.headshot_url }} style={styles.image} />
-          <View>
-            <Text style={styles.name}>{item.full_name}</Text>
-            <Text style={styles.number}>#{item.driver_number}</Text>
+        <TouchableOpacity
+          onPress={() => handleDriverPress(item)}
+          activeOpacity={0.7}
+        >
+          <View className="flex-row items-center p-4 my-2 bg-gray-200 rounded-lg shadow-md">
+            <Image
+              source={{ uri: item.headshot_url }}
+              className="w-16 h-16 rounded-full mr-4"
+            />
+            <View>
+              <Text className="text-lg font-bold">{item.full_name}</Text>
+              <Text className="text-gray-500">#{item.driver_number}</Text>
+              <Text className="text-gray-500">{item.team_name}</Text>
+            </View>
           </View>
-        </View>
+        </TouchableOpacity>
       )}
+      showsVerticalScrollIndicator={false}
     />
   );
 };
-
-const styles = StyleSheet.create({
-  card: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 10,
-    marginVertical: 5,
-    backgroundColor: "#f9f9f9",
-    borderRadius: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  image: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    marginRight: 10,
-  },
-  name: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  number: {
-    fontSize: 14,
-    color: "gray",
-  },
-});
 
 export default DriversList;

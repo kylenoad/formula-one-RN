@@ -11,12 +11,9 @@ export const getDrivers = async () => {
         session_key: "latest",
       },
     });
-    console.log(response); // Logs the entire response object
     return response.data;
   } catch (error) {
     console.error("Error fetching drivers:", error);
     throw error;
   }
 };
-
-getDrivers();
