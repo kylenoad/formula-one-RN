@@ -4,7 +4,7 @@
     "slug": "formula-one-RN",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/formula_1.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -13,7 +13,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/formula_1.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.kylenoad.formulaoneRN"
